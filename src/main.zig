@@ -1,6 +1,5 @@
 const std = @import("std");
 const cli = @import("./cli.zig");
-
 const json = @import("./json.zig");
 
 pub fn main() !void {
