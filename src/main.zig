@@ -78,11 +78,14 @@ pub fn main() !void {
         const filepath = try std.mem.concat(allocator, u8, &[_][]const u8{target_dir, "/", file_name});
         defer allocator.free(filepath);
 
-        std.fs.cwd().makeDir(target_dir) catch {};
-        var file = try std.fs.cwd().createFile(filepath, .{});
+        var cwd = std.fs.cwd();
+        cwd.makeDir(target_dir) catch {};
+        var file = try cwd.createFile(filepath, .{});
         defer file.close();
 
-        _ = try file.write(try buf.toOwnedSlice());
+        const data_slice = try buf.toOwnedSlice();
+        defer allocator.free(data_slice);
+        _ = try file.write(data_slice);
     }
 
     std.debug.print("done\n", .{});
