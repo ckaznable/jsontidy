@@ -44,7 +44,7 @@ pub fn main() !void {
         var json_data = try json.readJsonFileToHashMap(allocator, entry.?.dir, file_name);
         defer json_data.deinit();
 
-        var data = json_data.value.object;
+        var data = &json_data.value.object;
         const data_keys = data.keys();
 
         const keys = try allocator.alloc([]const u8, data_keys.len);
