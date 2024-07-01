@@ -68,6 +68,21 @@ pub fn main() !void {
         }
 
         std.debug.print("{s} keys after tidy: {}\n", .{file_name, data.keys().len});
+
+        var buf = std.ArrayList(u8).init(allocator);
+        defer buf.deinit();
+
+        try std.json.stringify(json_data.value, .{}, buf.writer());
+
+        const target_dir = "output";
+        const filepath = try std.mem.concat(allocator, u8, &[_][]const u8{target_dir, "/", file_name});
+        defer allocator.free(filepath);
+
+        std.fs.cwd().makeDir(target_dir) catch {};
+        var file = try std.fs.cwd().createFile(filepath, .{});
+        defer file.close();
+
+        _ = try file.write(try buf.toOwnedSlice());
     }
 
     std.debug.print("done\n", .{});
