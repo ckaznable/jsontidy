@@ -7,6 +7,4 @@ This is a repo for practicing zig with a simple function of organizing a json in
 ```shell
 jsontidy a.json target/
 ```
-```
-```
 
